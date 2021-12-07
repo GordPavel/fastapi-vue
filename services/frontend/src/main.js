@@ -5,7 +5,9 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/';  // the FastAPI backend
+const hrefRegex = /http:\/\/([\d\w.]+):\d+/;
+const groups = hrefRegex.exec(window.location.href);
+axios.defaults.baseURL = `http://${groups[1]}:8000/`;  // the FastAPI backend
 
 Vue.config.productionTip = false;
 
