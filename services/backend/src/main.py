@@ -20,23 +20,24 @@ app.add_middleware(
 
 @app.get("/solve")
 async def solve_equation(request: Request, a: float = 0, b: float = 0, c: float = 0):
-    solved_roots = np.roots([a, b, c])
-    solved_roots = np.round(np.unique(solved_roots[np.isreal(solved_roots)]), decimals=5)
     return {
-        "roots": solved_roots.tolist(),
+        "roots": get_roots(a, b, c).tolist(),
     }
 
 
-def get_plot_encoded(a: float = 0, b: float = 0, c: float = 0):
+def get_roots(a: float = 0, b: float = 0, c: float = 0):
     solved_roots = np.roots([a, b, c])
-    roots = list(np.sort(np.unique(solved_roots[abs(np.imag(solved_roots)) < 1e-5].real)))
+    return np.sort(np.unique(solved_roots[abs(np.imag(solved_roots)) < 1e-5].real))
 
-    if len(roots) == 2:
-        left_root, right_root = roots
-        window = right_root - left_root
-        left_window, right_window = left_root - window * .1, right_root + window * .1
-    elif len(roots) == 1:
-        left_root = right_root = roots[0]
+
+def get_plot_encoded(a: float = 0, b: float = 0, c: float = 0):
+    roots = get_roots(a, b, c).tolist()
+
+    if len(roots) in [1, 2]:
+        if len(roots) == 2:
+            left_root, right_root = roots
+        else:
+            left_root = right_root = roots[0]
         if a == 0:
             left_window, right_window = left_root - 2, right_root + 2
         else:
