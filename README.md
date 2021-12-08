@@ -16,4 +16,5 @@ Build the images and spin up the containers:
 $ docker-compose up -d --build
 ```
 
-After this run check [http://localhost:8080/]
+After this run check http://localhost:8080/, backend endpoints are available
+on http://localhost:8000/
